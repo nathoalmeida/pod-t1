@@ -1,0 +1,1 @@
+Uso: geraN <numero de valores a serem gerados> [limite superior para os valores]
