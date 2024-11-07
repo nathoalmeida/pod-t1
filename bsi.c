@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     }
     fclose(file);
 
-    int numBuckets = 5;
+    int numBuckets = 100;
     bucketSort(arr, count, numBuckets);
 
     file = fopen(argv[1], "w"); 
