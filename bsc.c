@@ -1,24 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void shellSort(int arr[], int n) {
-    int i , j , value;
-    int gap = 1;
-    while(gap < n) {
-        gap = 3*gap+1;
+void countSort(int inputArray[], int N) {
+    int M = 0;
+    for (int i = 0; i < N; i++)
+        if (inputArray[i] > M)
+            M = inputArray[i];
+    
+    
+    int* countArray = (int*)calloc(M + 1, sizeof(int));
+
+    for (int i = 0; i < N; i++)
+        countArray[inputArray[i]]++;
+    
+    for (int i = 1; i <= M; i++)
+        countArray[i] += countArray[i - 1];
+    
+    int* outputArray = (int*)malloc(N * sizeof(int));
+    for (int i = N - 1; i >= 0; i--) {
+        outputArray[countArray[inputArray[i]] - 1] = inputArray[i];
+        countArray[inputArray[i]]--;
     }
-    while ( gap > 1) {
-        gap /= 3;
-        for(i = gap; i < n; i++) {
-            value = arr[i];
-            j = i - gap;
-            while (j >= 0 && value < arr[j]) {
-                arr [j + gap] = arr[j];
-                j -= gap;
-            }
-            arr [j + gap] = value;
-        }
-    }
+    
+    for (int i = 0; i < N; i++)
+        inputArray[i] = outputArray[i];
+
+    free(countArray);
+    free(outputArray);
 }
 
 typedef struct {
@@ -70,7 +78,7 @@ void bucketSort(int arr[], int n, int numBuckets) {
     int index = 0;
     for (int i = 0; i < numBuckets; i++) {
         if (buckets[i].count > 0) {
-            shellSort(buckets[i].values, buckets[i].count);
+            countSort(buckets[i].values, buckets[i].count);
             for (int j = 0; j < buckets[i].count; j++) {
                 arr[index++] = buckets[i].values[j];
             }
